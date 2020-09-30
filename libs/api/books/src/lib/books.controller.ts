@@ -11,8 +11,8 @@ import { BooksService } from './books.service';
 export class BooksController {
   constructor(private readonly books: BooksService) {}
 
- // @Get('/books/search')
-  you should have a method here
+  @Get('/books/search')
+  
   async searchBooks(@Query('q') term) {
     try {
       return await this.books.search(term);
