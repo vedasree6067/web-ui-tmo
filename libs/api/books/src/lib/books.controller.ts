@@ -12,6 +12,7 @@ export class BooksController {
   constructor(private readonly books: BooksService) {}
 
  // @Get('/books/search')
+  you should have a method here
   async searchBooks(@Query('q') term) {
     try {
       return await this.books.search(term);
