@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, 
+  ChangeDetectionStrategy,
+  EventEmitter,
+  Output,
+  OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -23,7 +27,7 @@ export class BookSearchComponent implements OnInit {
   });
 
   constructor(
-    private readonly store: Store,
+     private readonly store: Store,
     private readonly fb: FormBuilder
   ) {}
 
@@ -31,12 +35,10 @@ export class BookSearchComponent implements OnInit {
     return this.searchForm.value.term;
   }
 
-  ngOnInit(): void {
-    this.store.select(getAllBooks).subscribe(books => {
-      this.books = books;
-    });
+  ngOnInit():void {
+    this.searchBooks();
   }
-
+  
   formatDate(date: void | string) {
     return date
       ? new Intl.DateTimeFormat('en-US').format(new Date(date))
@@ -53,10 +55,9 @@ export class BookSearchComponent implements OnInit {
   }
 
   searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
-    } else {
-      this.store.dispatch(clearSearch());
-    }
+    const searchTerm = this.searchForm.get('term');
+    searchTerm.valueChanges.forEach((term: string) =>
+      this.searchBooks.emit(term)
+    );
   }
 }
